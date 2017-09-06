@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/imonology/scalra",
   "dependencies": {
+    "node-kruskal": "0.0.4",
     "scalra": "*"
   }
 }
