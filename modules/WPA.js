@@ -39,7 +39,31 @@ var getBridgingEdge = function (edges, authors) {
 //
 
 // NOTE: this could be accessed as: SR.Module['WPA'].analyze
+/*
+example input:
+	var input = {
+		names:		args.names,
+		file_paths: file_paths,
+		authors:	authors,
+		words: 		args.word_size,
+		R_CUT: 		R_CUT,
+		stat_scope: stat_scope,
+		set_type: 	set_type
+	};
+*/
 exports.analyze = function (input, onDone) {
+	
+	// read files first
+	var file_paths = input.file_paths;
+	delete input.file_paths;
+	
+	var data = [];
+	for (var i=0; i < file_paths.length; i++) {
+		var path = file_paths[i];
+		data[i] = SR.fs.readFileSync(path);
+	}
+	
+	input.data = data;
 	
 	// TOFIX: need to 'new' every time?
 	var analyzer = new distance_matrix();

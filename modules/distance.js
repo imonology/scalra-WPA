@@ -18,8 +18,8 @@ function distance () {
 
 /*
 	var dist_input = UTIL.clone(input);			
-	dist_input.filei_path = input.file_paths[i],
-		dist_input.filej_path = input.file_paths[j],
+	dist_input.datai = input.data[i],
+		dist_input.dataj = input.data[j],
 			dist_input.i = i;
 	dist_input.j = j;
 */
@@ -45,18 +45,18 @@ distance.prototype.compute = function (input, onDone) {
 
 		// fs.writeFile(
 		// 	"./output/C_qij_table_"
-		// 	    + input.filei_path.split('/')[input.filei_path.split('/').length - 1],
+		// 	    + input.names[i],
 		// 	    + "_"
-		// 	    + input.filej_path.split('/')[input.filej_path.split('/').length - 1],
+		// 	    + input.names[j],
 		//
 		// 	util.inspect(result.qij_table)
 		// );
 		//
 		// fs.appendFile(
 		// 	"./output/D_distance_and_other_parameters_"
-		// 	    + input.filei_path.split('/')[input.filei_path.split('/').length - 1],
+		// 	    + input.names[i],
 		// 	    + "_"
-		// 	    + input.filej_path.split('/')[input.filej_path.split('/').length - 1],
+		// 	    + input.names[j],
 		//
 		// 	result.object_file + "\ndistance: " + dij
 		// );
@@ -65,8 +65,8 @@ distance.prototype.compute = function (input, onDone) {
 			"dij": dij,
 			"i": input.i,
 			"j": input.j,
-			"namei": input.filei_path.split('/')[input.filei_path.split('/').length - 1],
-			"namej": input.filej_path.split('/')[input.filej_path.split('/').length - 1],
+			"namei": input.names[input.i],
+			"namej": input.names[input.j],
 		});
 	});
 }
@@ -75,14 +75,18 @@ distance.prototype.compute = function (input, onDone) {
 distance.prototype.readFile = function (input, onDone) {
 	var self = this;
 	var parse_input = UTIL.clone(input);
-	parse_input.file_path = input.filei_path;
+	
+	// TOFIX: find a better way than passing input deeply
+	parse_input.data = input.datai;
+	parse_input.index = input.i;
 
 	file_parser.parse(parse_input, function (err, result1) {
 		if (err) {
 			return onDone(err);	
 		}
 		
-		parse_input.file_path = input.filej_path;			
+		parse_input.data = input.dataj;	
+		parse_input.index = input.j;
 		file_parser.parse(parse_input, function (err, result2) {
 			if (err) {
 				return onDone(err);	

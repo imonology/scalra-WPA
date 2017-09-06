@@ -29,96 +29,93 @@ word_frequency.prototype.parse = function (input, onDone) {
 	var rank = 1; // counter
 	var sorted_words = [];
 
-	// FIXME: should read only once for a given analysis
-	fs.readFile(input.file_path, function (err, data) {
+	var data = input.data;
 
-		if (err) {
-			return onDone(err);
+	// remove non chinese char
+	string_without_marks = data.toString().replace(/[^\u4E00-\u9FA5]+/g, ""); 
+
+	if (R_CUT < 0 || R_CUT > string_without_marks.length) {
+		R_CUT = string_without_marks.length;
+	}
+
+	for (var i = 0; i < string_without_marks.length - (input.words - 1); i++) {
+		if (string_without_marks[i] === "") {
+			continue;
 		}
+		// 你好嗎.slice(0, 2) -> 你好
+		word_slice = string_without_marks.slice(i, (i + input.words));
+		code = charmap.get(word_slice);
 
-		// remove non chinese char
-		string_without_marks = data.toString().replace(/[^\u4E00-\u9FA5]+/g, ""); 
-
-		if (R_CUT < 0 || R_CUT > string_without_marks.length) {
-			R_CUT = string_without_marks.length;
-		}
-
-		for (var i = 0; i < string_without_marks.length - (input.words - 1); i++) {
-			if (string_without_marks[i] === "") {
-				continue;
+		if (!code) {
+			charmap.set(word_slice, unique_words);
+			char_counter[unique_words] = {
+				key: word_slice,
+				value: 1,
+				probability: 0,
+				Rank: 0
 			}
-			// 你好嗎.slice(0, 2) -> 你好
-			word_slice = string_without_marks.slice(i, (i + input.words));
-			code = charmap.get(word_slice);
+			unique_words++;
+		} else {
+			char_counter[code].value++;
+		}
+	}
 
-			if (!code) {
-				charmap.set(word_slice, unique_words);
-				char_counter[unique_words] = {
-					key: word_slice,
-					value: 1,
-					probability: 0,
-					Rank: 0
-				}
-				unique_words++;
-			} else {
-				char_counter[code].value++;
+	for (var i = 0; i < char_counter.length; i++) {
+		if (!ranks[char_counter[i].value]) {
+			ranks[char_counter[i].value] = {
+				counter: 1,
+				rank: 0,
+				index: -1
 			}
+		} else {
+			ranks[char_counter[i].value].counter += 1;
 		}
+	}
 
-		for (var i = 0; i < char_counter.length; i++) {
-			if (!ranks[char_counter[i].value]) {
-				ranks[char_counter[i].value] = {
-					counter: 1,
-					rank: 0,
-					index: -1
-				}
-			} else {
-				ranks[char_counter[i].value].counter += 1;
-			}
+	for (var i = ranks.length - 1; i > 0; i--) {
+		if (ranks[i]) {
+			ranks[i].rank = rank;
+			rank += ranks[i].counter;
 		}
+	}
 
-		for (var i = ranks.length - 1; i > 0; i--) {
-			if (ranks[i]) {
-				ranks[i].rank = rank;
-				rank += ranks[i].counter;
-			}
-		}
+	for (var i = 0; i < char_counter.length; i++) {
+		char_counter[i].Rank = ranks[char_counter[i].value].rank;
+		char_counter[i].probability = char_counter[i].value / (string_without_marks.length - (input.words - 1));
+		sorted_words[(ranks[char_counter[i].value].rank + ranks[char_counter[i].value].index)] = char_counter[i];
+		ranks[char_counter[i].value].index++;
+	}
 
-		for (var i = 0; i < char_counter.length; i++) {
-			char_counter[i].Rank = ranks[char_counter[i].value].rank;
-			char_counter[i].probability = char_counter[i].value / (string_without_marks.length - (input.words - 1));
-			sorted_words[(ranks[char_counter[i].value].rank + ranks[char_counter[i].value].index)] = char_counter[i];
-			ranks[char_counter[i].value].index++;
-		}
+	//LOG.warn('check input for stat_scope...');
+	//LOG.warn(input);
 
-		//LOG.warn('check input for stat_scope...');
-		//LOG.warn(input);
-		
-		// whether to return the only R_CUT words
-		if (input.stat_scope && input.stat_scope === 'R_cut')
-			sorted_words = sorted_words.slice(0, R_CUT);
+	// whether to return the only R_CUT words
+	if (input.stat_scope && input.stat_scope === 'R_cut')
+		sorted_words = sorted_words.slice(0, R_CUT);
 
-		var filepath = input.file_path.split('/');
-		var filename = filepath[filepath.length-1];
-		
-		fs.writeFile(
-			"./output/A_raw_data_"
-			    + string_without_marks.length
-			    + "_"
-			    + unique_words
-			    + "_"
-			    + filename,
-			string_without_marks
-		);
-		
-		fs.writeFile(
-			"./output/B_freq_table_"
-			    + filename,
-			util.inspect(sorted_words)
-		);
+	//var filepath = input.file_path.split('/');
+	//var filename = filepath[filepath.length-1];
 
-		return onDone(null, {freq_table: sorted_words, filename: filename});
-	});
+	// store raw & frequency to files
+	var filename = input.names[input.index];
+
+	fs.writeFile(
+		"./output/A_raw_data_"
+			+ string_without_marks.length
+			+ "_"
+			+ unique_words
+			+ "_"
+			+ filename,
+		string_without_marks
+	);
+
+	fs.writeFile(
+		"./output/B_freq_table_"
+			+ filename,
+		util.inspect(sorted_words)
+	);
+
+	return onDone(null, {freq_table: sorted_words, filename: filename});
 }
 
 module.exports = word_frequency;

@@ -15,7 +15,7 @@ distance_matrix.prototype.get_frequency = function () {
 
 /*
 	var input = {
-		"file_paths": file_paths,
+		"data": data,
 		"words": args.word_size,
 		"R_CUT": R_CUT,
 		"stat_scope": stat_scope,
@@ -35,7 +35,7 @@ distance_matrix.prototype.generate = function (input, onDone) {
 	// a one-dimentional array to store results linearly
 	self.matrix_obj = [];
 	
-	var num_of_files = input.file_paths.length;
+	var num_of_files = input.data.length;
 
 	// go through articles in 'pairs' (i,j) to calculate their distances
 	for (var i = 0; i < num_of_files; i++) {
@@ -47,8 +47,8 @@ distance_matrix.prototype.generate = function (input, onDone) {
 			}
 			
 			var dist_input = UTIL.clone(input);			
-			dist_input.filei_path = input.file_paths[i],
-			dist_input.filej_path = input.file_paths[j],
+			dist_input.datai = input.data[i],
+			dist_input.dataj = input.data[j],
 			dist_input.i = i;
 			dist_input.j = j;
 							
