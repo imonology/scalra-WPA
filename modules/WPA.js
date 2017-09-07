@@ -47,8 +47,8 @@ example input:
 		authors:	[string],				// array of author names
 		words: 		'number',				// ex. 2
 		R_CUT: 		'number',				// ex. 70
-		stat_scope: 'string',				// ['r_cut', 'full']
-		set_type: 	'string',				// ['union', 'intersection']
+		stat_scope: 'string',				// ['R_cut', 'Full']
+		set_type: 	'string',				// when compare two articles, which word set to use: ['union', 'intersection']
 		write_freq_table:	'boolean',		// whether to output frequency table to file
 		write_raw:	'boolean'				// whether to output raw data to file
 	};
