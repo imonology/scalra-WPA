@@ -42,13 +42,15 @@ var getBridgingEdge = function (edges, authors) {
 /*
 example input:
 	var input = {
-		names:		args.names,
-		file_paths: file_paths,
-		authors:	authors,
-		words: 		args.word_size,
-		R_CUT: 		R_CUT,
-		stat_scope: stat_scope,
-		set_type: 	set_type
+		names:		'string',				// array of data labels (ex. filenames)
+		data: 		[string],				// array of raw data (with puntuation marks)
+		authors:	[string],				// array of author names
+		words: 		'number',				// ex. 2
+		R_CUT: 		'number',				// ex. 70
+		stat_scope: 'string',				// ['r_cut', 'full']
+		set_type: 	'string',				// ['union', 'intersection']
+		write_freq_table:	'boolean',		// whether to output frequency table to file
+		write_raw:	'boolean'				// whether to output raw data to file
 	};
 */
 exports.analyze = function (input, onDone) {

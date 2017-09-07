@@ -98,22 +98,28 @@ word_frequency.prototype.parse = function (input, onDone) {
 
 	// store raw & frequency to files
 	var filename = input.names[input.index];
+	// NOTE: currently the same exact file will be written multiple times,
+	// if 'unique_words' are different due to different word-length selection
+	// do not write files depend on settings
+	if (input.write_raw === true) {
+		fs.writeFile(
+			"./output/A_raw_data_"
+				+ string_without_marks.length
+				+ "_"
+				+ unique_words
+				+ "_"
+				+ filename,
+			string_without_marks
+		);		
+	}
 
-	fs.writeFile(
-		"./output/A_raw_data_"
-			+ string_without_marks.length
-			+ "_"
-			+ unique_words
-			+ "_"
-			+ filename,
-		string_without_marks
-	);
-
-	fs.writeFile(
-		"./output/B_freq_table_"
-			+ filename,
-		util.inspect(sorted_words)
-	);
+	if (input.write_freq_table === true) {
+		fs.writeFile(
+			"./output/B_freq_table_"
+				+ filename,
+			util.inspect(sorted_words)
+		);		
+	}
 
 	return onDone(null, {freq_table: sorted_words, filename: filename});
 }
