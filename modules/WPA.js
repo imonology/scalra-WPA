@@ -55,18 +55,30 @@ example input:
 */
 exports.analyze = function (input, onDone) {
 	
-	// read files first
-	var file_paths = input.file_paths;
-	delete input.file_paths;
+	// check if raw data exist or we need to read from file
+	if (!input.data && input.file_paths instanceof Array) {
+		LOG.warn('file_paths provided, read from files..', l_name);
+		
+		var file_paths = input.file_paths;
+		delete input.file_paths;
+
+		var data = [];
+		for (var i=0; i < file_paths.length; i++) {
+			var path = file_paths[i];
+			data[i] = SR.fs.readFileSync(path);
+		}
+
+		input.data = data;		
+	} 
 	
-	var data = [];
-	for (var i=0; i < file_paths.length; i++) {
-		var path = file_paths[i];
-		data[i] = SR.fs.readFileSync(path);
+	if (input.data instanceof Array === false ||
+		input.names instanceof Array === false ||
+		input.data.length !== input.names.length) {
+		var errmsg = 'input parameter not consistent';
+		LOG.error(errmsg, l_name);
+		return onDone(errmsg);
 	}
-	
-	input.data = data;
-	
+		
 	// TOFIX: need to 'new' every time?
 	var analyzer = new distance_matrix();
 	
