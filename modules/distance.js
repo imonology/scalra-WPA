@@ -41,7 +41,7 @@ distance.prototype.compute = function (input, onDone) {
 		}
 		
 		dij = dij / result.unique_words;
-		LOG.warn('dij: ' + dij + ' unique_words: ' + result.unique_words);
+		//LOG.warn('dij: ' + dij + ' unique_words: ' + result.unique_words);
 
 		// fs.writeFile(
 		// 	"./output/C_qij_table_"
@@ -92,8 +92,8 @@ distance.prototype.readFile = function (input, onDone) {
 				return onDone(err);	
 			}
 
-			LOG.warn('1 [' + result1.filename + '] size: ' + result1.freq_table.length);
-			LOG.warn('2 [' + result2.filename + '] size: ' + result2.freq_table.length);
+			//LOG.warn('1 [' + result1.filename + '] size: ' + result1.freq_table.length);
+			//LOG.warn('2 [' + result2.filename + '] size: ' + result2.freq_table.length);
 			
 			// save to global 
 			l_freq_table[result1.filename] = result1.freq_table;
@@ -128,7 +128,8 @@ distance.prototype.function_Z = function (input, onDone) {
 
 	// TOFIX: may not be union, can also be 'intersection'
 	unique_words = tablei.length + tablej.length;
-	LOG.warn('tablei length: ' + tablei.length + ' tablej.length: ' + tablej.length + ' unique: ' + unique_words);
+	//LOG.warn('tablei length: ' + tablei.length + ' tablej.length: ' + tablej.length + ' unique: ' + unique_words);
+	
 	sum_of_Pij = 0;
 	index_counter = 0;
 	

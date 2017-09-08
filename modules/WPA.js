@@ -30,7 +30,6 @@ var getBridgingEdge = function (edges, authors) {
 			count++;
 		}
 	}
-	LOG.warn('Bridging Edge is: ' + count, l_name);
 	return count;
 }
 
@@ -88,8 +87,8 @@ exports.analyze = function (input, onDone) {
 			return onDone(err);	
 		}
 		
-		LOG.warn('WPA analysis result:', l_name);
-		LOG.warn(result, l_name);
+		//LOG.warn('WPA analysis result:', l_name);
+		//LOG.warn(result, l_name);
 		
 		// convert result into table
 		var table = {
@@ -127,8 +126,8 @@ exports.analyze = function (input, onDone) {
 		
 		// calculate MST
 		kruskal.kruskalMST(table.value, function (mst) {
-			LOG.warn('MST:', l_name);
-			LOG.warn(mst, l_name);
+			//LOG.warn('MST:', l_name);
+			//LOG.warn(mst, l_name);
 			
 			// calculate Bridging Edges (E_bridge) based on edge and author list
 			var E_bridge = getBridgingEdge(mst.mstArray, input.authors);
@@ -140,7 +139,12 @@ exports.analyze = function (input, onDone) {
 				freq_table[input.names[i]] = l_freq_table[input.names[i]];
 			}
 			
-			onDone(null, {table: table, MST: mst, E_bridge: E_bridge, freq: freq_table});			
+			var output = {table: table, MST: mst, E_bridge: E_bridge, freq: freq_table};
+			//LOG.warn(output, l_name);
+			
+			LOG.warn('words: ' + input.words + ' R_cut: ' + input.R_CUT + ' Bridging Edges: ' + E_bridge, l_name);
+			
+			onDone(null, output);			
 		});
 	})
 	
