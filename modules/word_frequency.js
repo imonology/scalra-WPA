@@ -108,7 +108,8 @@ word_frequency.prototype.parse = function (input, onDone) {
 				+ "_"
 				+ unique_words
 				+ "_"
-				+ filename,
+				+ filename 
+				+ '.txt',
 			string_without_marks
 		);		
 	}
@@ -116,7 +117,8 @@ word_frequency.prototype.parse = function (input, onDone) {
 	if (input.write_freq_table === true) {
 		fs.writeFile(
 			"./output/B_freq_table_"
-				+ filename,
+				+ filename
+				+ '.txt',			
 			util.inspect(sorted_words)
 		);		
 	}

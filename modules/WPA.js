@@ -153,6 +153,8 @@ exports.analyze = function (input, onDone) {
 // module init
 l_module.start = function (config, onDone) {
 	LOG.warn('WPA module started...', l_name);
+	// ensure directory exists
+	UTIL.validatePath(SR.path.resolve(SR.Settings.PROJECT_PATH, 'output'));
 	UTIL.safeCall(onDone);
 }
 
