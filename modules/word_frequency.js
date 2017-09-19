@@ -116,8 +116,8 @@ word_frequency.prototype.parse = function (input, onDone) {
 
 	if (input.write_freq_table === true) {
 		fs.writeFile(
-			"./output/B_freq_table_"
-				+ filename
+			'./output/B_freq_table_'
+				+ input.words + '_' + input.R_CUT + '_' + filename  
 				+ '.txt',			
 			util.inspect(sorted_words)
 		);		
