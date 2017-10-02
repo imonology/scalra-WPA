@@ -37,6 +37,17 @@ var getBridgingEdge = function (edges, authors) {
 // exports
 //
 
+// group a list of input to closest groups
+exports.group = function (input, onDone) {
+	
+	var results = [];
+	for (var i in input.data) {
+		results.push(input.data[i] + ' group');
+	}
+	
+	onDone(null, results);
+}
+
 // NOTE: this could be accessed as: SR.Module['WPA'].analyze
 /*
 example input:
@@ -117,7 +128,7 @@ exports.analyze = function (input, onDone) {
 			}
 		}
 		// console.log(table.value);
-		
+		// set diagnoal line (distance to self) all to 0
 		for (var i = 0; i < table.value.length; i++) {
 			table.value[i][i] = 0;
 			table.rowLabel[i] = i + 1;
