@@ -3,7 +3,7 @@
 */
 
 var distance = require("./distance.js");
-var calculator = new distance();
+//var calculator = new distance();
 
 function distance_matrix () {
 	return this;
@@ -27,7 +27,7 @@ distance_matrix.prototype.generate = function (input, onDone) {
 	self.R_CUT = input.R_CUT;
 	var counter = 0;
 
-	self.calculator = calculator;
+	self.calculator = new distance();
 	
 	// a 2x2 matrix to store distances
 	self.matrix = [];
