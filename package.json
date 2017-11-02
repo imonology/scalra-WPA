@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/imonology/scalra/issues"
   },
-  "homepage": "https://github.com/imonology/scalra",
+  "homepage": "https://github.com/imonology/scalra-WPA",
   "dependencies": {
     "node-kruskal": "0.0.4",
     "scalra": "*",
@@ -29,6 +29,6 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://syhu:8fba964125d986a2dbad1892af2cdb67b80e2837@github.com/imonology/syhu-scalra-WPA.git"
+    "url": "https://github.com/imonology/scalra-WPA.git"
   }
 }
