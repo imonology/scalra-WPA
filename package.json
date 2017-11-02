@@ -1,6 +1,6 @@
 {
   "name": "scalra-wpa",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Word Population Analysis (WPA) module for Scalra node.js framework",
   "scripts": {
     "start": "node lobby/frontier.js"
