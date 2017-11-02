@@ -1,5 +1,5 @@
 {
-  "name": "scalra-WPA",
+  "name": "scalra-wpa",
   "version": "0.0.2",
   "description": "Word Population Analysis (WPA) module for Scalra node.js framework",
   "scripts": {
@@ -21,5 +21,14 @@
     "node-kruskal": "0.0.4",
     "scalra": "*",
     "textract": "^2.2.0"
+  },
+  "main": "modules/WPA.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://syhu:8fba964125d986a2dbad1892af2cdb67b80e2837@github.com/imonology/syhu-scalra-WPA.git"
   }
 }
