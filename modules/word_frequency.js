@@ -12,7 +12,6 @@ function word_frequency () {
 }
 
 word_frequency.prototype.parse = function (input, onDone) {
-
 	var self = this;
 
 	// default to one character per word
@@ -32,34 +31,56 @@ word_frequency.prototype.parse = function (input, onDone) {
 	var data = input.data;
 
 	// remove non chinese char
-	string_without_marks = data.toString().replace(/[^\u4E00-\u9FA5]+/g, ""); 
+	if (input.mode && input.mode === 'en')
+		string_without_marks = data.toString().replace(/[^a-zA-Z0-9_' ']/,'');
+	else
+		string_without_marks = data.toString().replace(/[^\u4E00-\u9FA5]+/g, ""); 
 
 	if (R_CUT < 0 || R_CUT > string_without_marks.length) {
 		R_CUT = string_without_marks.length;
 	}
 
-	for (var i = 0; i < string_without_marks.length - (input.words - 1); i++) {
-		if (string_without_marks[i] === "") {
-			continue;
-		}
-		// 你好嗎.slice(0, 2) -> 你好
-		word_slice = string_without_marks.slice(i, (i + input.words));
-		code = charmap.get(word_slice);
-
-		if (!code) {
-			charmap.set(word_slice, unique_words);
-			char_counter[unique_words] = {
-				key: word_slice,
-				value: 1,
-				probability: 0,
-				Rank: 0
+	if (input.mode && input.mode === 'en') {
+		var all_word = string_without_marks.split(" ");
+		for (var i = 0 ; i < all_word.length ; i++) {
+			code = charmap.get(all_word[i]);
+			if (!code) {
+				charmap.set(all_word[i], unique_words);
+				char_counter[unique_words] = {
+					key: all_word[i],
+					value: 1,
+					probability: 0,
+					Rank: 0
+				}
+				unique_words++;
+			} else {
+				char_counter[code].value++;
 			}
-			unique_words++;
-		} else {
-			char_counter[code].value++;
+		}
+	} else {
+	
+		for (var i = 0; i < string_without_marks.length - (input.words - 1); i++) {
+			if (string_without_marks[i] === "") {
+				continue;
+			}
+			// 你好嗎.slice(0, 2) -> 你好
+			word_slice = string_without_marks.slice(i, (i + input.words));
+			code = charmap.get(word_slice);
+
+			if (!code) {
+				charmap.set(word_slice, unique_words);
+				char_counter[unique_words] = {
+					key: word_slice,
+					value: 1,
+					probability: 0,
+					Rank: 0
+				}
+				unique_words++;
+			} else {
+				char_counter[code].value++;
+			}
 		}
 	}
-
 	for (var i = 0; i < char_counter.length; i++) {
 		if (!ranks[char_counter[i].value]) {
 			ranks[char_counter[i].value] = {
@@ -122,7 +143,7 @@ word_frequency.prototype.parse = function (input, onDone) {
 			util.inspect(sorted_words)
 		);		
 	}
-
+	
 	return onDone(null, {freq_table: sorted_words, filename: filename});
 }
 
